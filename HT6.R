@@ -48,28 +48,15 @@ modelo<-glm(EsCara~., data = train[,c(1:10,14)],family = binomial(), maxit=100)
 pred<-predict(modelo,newdata = test[,1:10], type = "response")
 prediccion<-ifelse(pred>=0.5,1,0)
 confusionMatrix(as.factor(test$EsCara),as.factor(prediccion))
-
+#-------------------------------------------------------
+#GRAFICA PARA ANALISIS DE DATOS
 plot(modelo)
-
-##############################################################################################
-
-#PRUEBAS DE GRAFICACION DE MODELO 
-
-#modelo<-glm(EsCara~., data = train[,c(1:10,14)],family = binomial(), maxit=100)
-
-#range(train$EsCara)
-#range(train$SalePrice)
-#xweight <- seq(35000, 755000, 705.5)
-#yweight <- predict(modelo,train[,1:10],type="response")
-#yweight <- ifelse(yweight>=0.5,1,0)
-#plot(train$SalePrice, train$EsCara, pch = 16, xlab = "PRECIOS", ylab = "ES O NO CARA")
-#lines(xweight, yweight)
-
-#library(popbio)
-#logi.hist.plot(train$salePrice,train$EsCara,boxp=FALSE,type="hist",col="gray")
-
-#plot(train$salePrice,train$EsCara,xlab="Precio",ylab="Es cara") 
-#g=glm(survive~bodysize,family=binomial,dat)
-#curve(predict(g,data.frame(bodysize=x),type="resp"),add=TRUE)
-#points(bodysize,fitted(g),pch=20) 
-
+#-------------------------------------------------------
+#GRAFICA DE REGRESION LOGISTICA
+#-------------------------------------------------------
+precios <- test$SalePrice
+dat=as.data.frame(cbind(precios,prediccion))
+plot(precios,prediccion,xlab="Precio de Casa",ylab="Probability of Ser Cara") 
+g=glm(prediccion~precios,family=binomial,dat) 
+curve(predict(g,data.frame(precios=x),type="resp"),add=TRUE) 
+points(precios,fitted(g),pch=20)
