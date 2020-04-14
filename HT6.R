@@ -49,28 +49,27 @@ pred<-predict(modelo,newdata = test[,1:10], type = "response")
 prediccion<-ifelse(pred>=0.5,1,0)
 confusionMatrix(as.factor(test$EsCara),as.factor(prediccion))
 
-# Confusion Matrix and Statistics
-# 
-# Reference
-# Prediction  0  1
-# 0 27  2
-# 1  1 15
-# 
-# Accuracy : 0.9333         
-# 95% CI : (0.8173, 0.986)
-# No Information Rate : 0.6222         
-# P-Value [Acc > NIR] : 1.906e-06      
-# 
-# Kappa : 0.8565         
-# Mcnemar's Test P-Value : 1              
-# 
-# Sensitivity : 0.9643         
-# Specificity : 0.8824         
-# Pos Pred Value : 0.9310         
-# Neg Pred Value : 0.9375         
-# Prevalence : 0.6222         
-# Detection Rate : 0.6000         
-# Detection Prevalence : 0.6444         
-# Balanced Accuracy : 0.9233         
-# 
-# 'Positive' Class : 0  
+plot(modelo)
+
+##############################################################################################
+
+#PRUEBAS DE GRAFICACION DE MODELO 
+
+#modelo<-glm(EsCara~., data = train[,c(1:10,14)],family = binomial(), maxit=100)
+
+#range(train$EsCara)
+#range(train$SalePrice)
+#xweight <- seq(35000, 755000, 705.5)
+#yweight <- predict(modelo,train[,1:10],type="response")
+#yweight <- ifelse(yweight>=0.5,1,0)
+#plot(train$SalePrice, train$EsCara, pch = 16, xlab = "PRECIOS", ylab = "ES O NO CARA")
+#lines(xweight, yweight)
+
+#library(popbio)
+#logi.hist.plot(train$salePrice,train$EsCara,boxp=FALSE,type="hist",col="gray")
+
+#plot(train$salePrice,train$EsCara,xlab="Precio",ylab="Es cara") 
+#g=glm(survive~bodysize,family=binomial,dat)
+#curve(predict(g,data.frame(bodysize=x),type="resp"),add=TRUE)
+#points(bodysize,fitted(g),pch=20) 
+
