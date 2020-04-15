@@ -12,8 +12,8 @@ library(rpart)
 library(randomForest)
 #Modelo de Regresi?n log?stica
 
-#setwd("C:/Users/Gustavo/Desktop/SEPTIMO SEMESTRE/MINERIA/HDT6/Hoja-de-Trabajo-06")
-setwd("C:/Users/alber/Documents/UVG/Septimo semestre/Mineria de Datos/Hoja-Trabajo-6/Hoja-de-trabajo-06")
+setwd("C:/Users/Gustavo/Desktop/SEPTIMO SEMESTRE/MINERIA/HDT6/Hoja-de-Trabajo-06")
+#setwd("C:/Users/alber/Documents/UVG/Septimo semestre/Mineria de Datos/Hoja-Trabajo-6/Hoja-de-trabajo-06")
 
 porcentaje<-0.7
 set.seed(123)
@@ -44,7 +44,7 @@ test<-trainImportantes[-corte,]
 modelo<-glm(EsCara~., data = train[,c(1:10,14)],family = binomial(), maxit=100)
 
 #-------------------------------------------------
-# Regresi?n Logistica 
+# Regresion Logistica 
 #-------------------------------------------------
 
 ##Modelo con todas las variables
@@ -91,6 +91,26 @@ testCompleto<-test1
 testCompleto$predRF<-round(prediccionRF1)
 cfmRandomForest <- confusionMatrix(table(testCompleto$predRF, testCompleto$grupo))
 cfmRandomForest
+###############################################################################
+#---------------------------------------------------------------------
+#TODOS LOS DATOS
+datos$grupo<-km$cluster
+
+#PARA TRAIN TREE SON OTRAS VARIABLES
+trainTree <- datos[c("LotArea","YearBuilt","YearRemodAdd","X2ndFlrSF","FullBath","KitchenAbvGr","GarageCars","grupo")]
+porciento <- 70/100
+
+trainRowsNumber<-sample(1:nrow(trainTree),porciento*nrow(trainTree))
+train1<-trainTree[trainRowsNumber,]
+test1<-trainTree[-trainRowsNumber,]
+
+modeloRF1<-randomForest(grupo~.,data=train1)
+prediccionRF1<-predict(modeloRF1,newdata = test1[,1:7])
+testCompleto<-test1
+testCompleto$predRF<-round(prediccionRF1)
+cfmRandomForest <- confusionMatrix(table(testCompleto$predRF, testCompleto$grupo))
+cfmRandomForest
+#-------------------------------------------------------------------------------------
 #ANALISIS CORPLOT
 library(corrplot)
 
