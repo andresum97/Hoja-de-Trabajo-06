@@ -91,3 +91,11 @@ testCompleto<-test1
 testCompleto$predRF<-round(prediccionRF1)
 cfmRandomForest <- confusionMatrix(table(testCompleto$predRF, testCompleto$grupo))
 cfmRandomForest
+#ANALISIS CORPLOT
+library(corrplot)
+
+variables <- trainImportantes
+variables$grupo <- NULL
+matriz_cor <- cor(variables)
+matriz_cor
+corrplot(matriz_cor)
