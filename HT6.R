@@ -38,7 +38,7 @@ train<-trainImportantes[corte,]
 test<-trainImportantes[-corte,]
 
 #Queremos saber si una casa es cara o no
-modelo<-glm(train$trainImportantesCaro~., data = train[,c(1:10,15)],family = binomial(), maxit=100)
+modelo<-glm(EsCara~., data = train[,c(1:10,14)],family = binomial(), maxit=100)
 
 #-------------------------------------------------
 # Regresión Logistica 
@@ -47,7 +47,7 @@ modelo<-glm(train$trainImportantesCaro~., data = train[,c(1:10,15)],family = bin
 ##Modelo con todas las variables
 pred<-predict(modelo,newdata = test[,1:10], type = "response")
 prediccion<-ifelse(pred>=0.5,1,0)
-confusionMatrix(as.factor(test$datosvirginica),as.factor(prediccion))
+confusionMatrix(as.factor(test$EsCara),as.factor(prediccion))
 
 # Confusion Matrix and Statistics
 # 
