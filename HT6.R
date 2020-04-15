@@ -1,16 +1,19 @@
 #library(e1071)
-#install.packages("dummy) Esto es para convertir todas las variables categóricas del set de datos
+#install.packages("dummy) Esto es para convertir todas las variables categ?ricas del set de datos
 #install.packages("dummies") Este es para convertir solo una variable
 
 library(caret)
 library(dummies)
 library(plyr)
 library(dplyr)
+library(e1071)
+library(lattice)
+library(rpart)
+library(randomForest)
+#Modelo de Regresi?n log?stica
 
-#Modelo de Regresión logística
-
-setwd("C:/Users/Gustavo/Desktop/SEPTIMO SEMESTRE/MINERIA/HDT6/Hoja-de-Trabajo-06")
-#setwd("C:/Users/alber/Documents/UVG/Septimo semestre/Mineria de Datos/Hoja-Trabajo-5/Hoja-de-trabajo-5")
+#setwd("C:/Users/Gustavo/Desktop/SEPTIMO SEMESTRE/MINERIA/HDT6/Hoja-de-Trabajo-06")
+setwd("C:/Users/alber/Documents/UVG/Septimo semestre/Mineria de Datos/Hoja-Trabajo-6/Hoja-de-trabajo-06")
 
 porcentaje<-0.7
 set.seed(123)
@@ -41,7 +44,7 @@ test<-trainImportantes[-corte,]
 modelo<-glm(EsCara~., data = train[,c(1:10,14)],family = binomial(), maxit=100)
 
 #-------------------------------------------------
-# Regresión Logistica 
+# Regresi?n Logistica 
 #-------------------------------------------------
 
 ##Modelo con todas las variables
@@ -60,3 +63,31 @@ plot(precios,prediccion,xlab="Precio de Casa",ylab="Probability of Ser Cara")
 g=glm(prediccion~precios,family=binomial,dat) 
 curve(predict(g,data.frame(precios=x),type="resp"),add=TRUE) 
 points(precios,fitted(g),pch=20)
+
+
+#COMPARACION CON NAIVES BAYES
+#------------------------------------------------------
+modelo_naive<-naiveBayes(as.factor(EsCara)~.,data=trainImportantes)
+predBayes<-predict(modelo_naive, newdata = test[,1:10])
+confusionMatrix(table(predBayes,test$EsCara))
+
+#COMPARACION CON ARBOL DE PREDICCION (CLASIFICACION)
+#-----------------------------------------------------
+modelo_class<-rpart(EsCara~.,trainImportantes,method = "class")
+prediccion <- predict(modelo, newdata = test[,1:10])
+
+#columnaMasAlta<-apply(prediccion, 1, function(x) colnames(prediccion)[which.max(x)])
+#test1$prediccion<-columnaMasAlta #Se le aÃ±ade al grupo de prueba el valor de la predicciÃ³n
+#View(test1)
+cfm<-confusionMatrix(table(test1$prediccion, test1$grupo))
+cfm
+
+
+#RANDOM FOREST
+#------------------------------------------------------
+modelo_RF<-randomForest(EsCara~.,data=trainImportantes)
+prediccionRF1<-predict(modeloRF1,newdata = test[,1:10])
+testCompleto<-test1
+testCompleto$predRF<-round(prediccionRF1)
+cfmRandomForest <- confusionMatrix(table(testCompleto$predRF, testCompleto$grupo))
+cfmRandomForest
